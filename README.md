@@ -14,16 +14,7 @@
 * Muhammad Umar Rusjanto (5025231176)
 
 ### 1. Introduction
-
-#### 1.1 The Challenge: Efficient Dispatch
-
-In the modern logistics and transportation industry, taxi fleets face a critical operational challenge: assigning multiple drivers located at various coordinates to waiting customers in the most efficient manner possible.
-
-The core of this problem is not merely finding the nearest driver for a single customer, but rather finding a global optimum where the total travel cost (or time) for the entire fleet is minimized. This is complicated by the constraint that orders are often concurrent, requiring a strict 1-to-1 matching where one driver serves exactly one customer.
-
-#### 1.2 Objective
-
-The primary goal of this project is to model the taxi dispatch scenario using Graph Theory and implement the Hungarian Algorithm to minimize the aggregate cost of travel.
+A taxi driver has several drivers in different locations. Each driver has different travel times or costs to reach each location point because of the distance from the starting location to the destination. Since taxi orders do not come after another order finishes, they need to utilize their driver to assign each of their driver to the closest customer at the same time.
 
 ### 2. Theoretical Framework
 
@@ -31,42 +22,69 @@ The primary goal of this project is to model the taxi dispatch scenario using Gr
 
 To solve the dispatching problem mathematically, we model the scenario as a **Weighted Bipartite Graph**. This structure is ideal for visualizing relationships between two distinct, disjoint sets of vertices.
 
-* **Set A (Drivers):** Represents the available taxi fleet.
+* **Set A (Drivers):** taxi fleet
 
-* **Set B (Customers):** Represents the passengers waiting for pickup.
+* **Set B (Customers):** passenger
 
-* **Edges:** Represent the potential assignment of a specific driver to a specific customer.
+* **Edges:** potential pickup of driver to customer.
 
-* **Weights:** Each edge is assigned a numerical weight representing the "cost" of that assignment. This cost typically correlates to travel distance or estimated time of arrival (ETA).
+* **Weights:** edge is assigned a number for the cost or travel distance
 
-By representing the problem this way, the logistical challenge transforms into a standard "Assignment Problem"—finding a perfect matching in a weighted bipartite graph that minimizes the sum of weights.
+By making the problem this way, it transforms into a "Assignment Problem" finding a perfect matching that minimizes the sum of the cost to travel.
 
-### 3. Proposed Solution: The Hungarian Algorithm
+### 3. Solution
 
-To solve this combinatorial optimization problem efficiently, we propose the use of the **Hungarian Algorithm**. This algorithm solves the assignment problem in polynomial time, making it significantly faster than brute-force permutation methods for larger datasets.
+To solve this, we use of the **Hungarian Algorithm**.
 
 #### 3.1 Algorithm Process
 
-The algorithm proceeds in two main phases consisting of six distinct steps:
+#### **1. Initialization**
+* **Input:** Determine the number of drivers/customers (n).
+* **Input Cost Matrix:** Create matrix C[i][j], where each element represents the travel cost or time from Driver i to Customer j.
+* **Backup:** Store a copy of this original matrix (to compute the final total cost later).
 
-**Phase 1: Reduction**
+#### **2. Row Reduction**
+* **For each row i:**
+    * Find the minimum value in that row.
+    * Subtract this minimum from every element in that row.
 
-1. **Initialization:** We begin with a square Cost Matrix ($C$), where $C_{ij}$ represents the cost for Driver $i$ to reach Customer $j$.
+#### **3. Column Reduction**
+* **For each column j:**
+    * Find the minimum value in that column.
+    * Subtract this minimum from every element in that column.
 
-2. **Row Reduction:** For every row in the matrix, identify the minimum value and subtract it from all elements in that specific row. This ensures every row has at least one zero.
+#### **4. Cover Zeros**
+* **Action:** Cover all zeros in the matrix using the **minimum** number of horizontal and vertical lines.
+* **Count:** Let the number of lines = k.
 
-3. **Column Reduction:** Repeat the process vertically. Identify the minimum value in each column of the reduced matrix and subtract it from all elements in that column.
+#### **5. Optimality Check (Is k == n? )**
 
-**Phase 2: Optimization and Assignment**
-4.  **Cover Zeros:** We attempt to cover all zeros in the matrix using the minimum number of horizontal and vertical lines ($k$).
-5.  **Optimality Check:**
-\* If the number of lines ($k$) equals the dimension of the matrix ($n$), an optimal assignment is possible.
-\* If $k < n$, we must adjust the matrix. We find the smallest uncovered value, subtract it from all uncovered elements, and add it to elements at the intersection of lines. We then repeat the covering step.
-6.  **Assignment:** Once optimality is reached, we select a set of zeros such that there is exactly one selected zero in each row and column. These positions represent the optimal driver-customer pairings.
+**(If k < n):**
+1.  **Find m:** Identify the smallest element that is *not* covered by any line.
+2.  **Adjust Matrix:**
+    * Subtract m from every uncovered element.
+    * Add m to every element located at the intersection of two lines.
+3.  **Loop:** Return to **Step 4 (Cover Zeros)**.
+
+**(If k == n):**
+* Proceed to next step.
+
+#### **6. Assignment**
+* **Selection:** From the final zero matrix, choose a set of zeros such that there is exactly **one** selected zero per row and per column.
+* **Record:** These positions represent the optimal Driver-to-Customer pairings (i, j).
+
+#### **7. Compute Total Cost**
+* **Summation:** For each assigned pair (i, j):
+    * Retrieve the cost from the *original* matrix (C_{original}[i][j]).
+    * Add this to the `TotalCost`.
+
+#### **8. Output**
+* **Optimal Assignment:** Display which driver is assigned to which customer.
+* **Minimum Total Cost:** Display the final calculated sum.
 
 ### 4. Case Study: 3x3 Matrix Scenario
 
-To illustrate the effectiveness of the algorithm, we consider a scenario with 3 Taxis and 3 Customers with the following cost matrix (time in minutes):
+this is example for the hungarian algorithm test
 
 | Source \\ Dest | Customer 1 | Customer 2 | Customer 3 | 
  | ----- | ----- | ----- | ----- | 
@@ -80,16 +98,98 @@ A simple "greedy" approach might immediately assign **Taxi 1 to Customer 3** bec
 
 The Hungarian Algorithm evaluates the matrix holistically. By processing the reductions, it identifies assignments that might look sub-optimal individually but result in the lowest **total** system cost.
 
-### 5. Expected Benefits
+### 5. Code
+```
+from math import inf
 
-Implementing this algorithmic approach yields three primary benefits for the fleet operator:
+def hungarian(cost):
+    n = len(cost)
+    u = [0] * (n + 1)
+    v = [0] * (n + 1)
+    p = [0] * (n + 1)
+    way = [0] * (n + 1)
 
-1. **Reduced Wait Times:** Optimized routing ensures that the aggregate waiting time for all customers is minimized, directly improving customer satisfaction.
+    for i in range(1, n + 1):
+        p[0] = i
+        j0 = 0
+        minv = [inf] * (n + 1)
+        used = [False] * (n + 1)
 
-2. **Fuel & Cost Savings:** By minimizing total distance traveled, the fleet consumes less fuel and incurs less vehicle wear-and-tear.
+        while True:
+            used[j0] = True
+            i0 = p[j0]
+            delta = inf
+            j1 = 0
 
-3. **Operational Efficiency:** Automated mathematical assignment removes human error and bias from the dispatching process, allowing for instant decision-making even during peak hours.
+            for j in range(1, n + 1):
+                if not used[j]:
+                    cur = cost[i0 - 1][j - 1] - u[i0] - v[j]
+                    if cur < minv[j]:
+                        minv[j] = cur
+                        way[j] = j0
+                    if minv[j] < delta:
+                        delta = minv[j]
+                        j1 = j
 
-### 6. Conclusion
+            for j in range(n + 1):
+                if used[j]:
+                    u[p[j]] += delta
+                    v[j] -= delta
+                else:
+                    minv[j] -= delta
+
+            j0 = j1
+            if p[j0] == 0:
+                break
+
+        while True:
+            j1 = way[j0]
+            p[j0] = p[j1]
+            j0 = j1
+            if j0 == 0:
+                break
+
+    assignment = [-1] * n
+    for j in range(1, n + 1):
+        assignment[p[j] - 1] = j - 1
+
+    total_cost = sum(cost[i][assignment[i]] for i in range(n))
+    return assignment, total_cost
+
+
+# input
+n = int(input("number of taxi and customers: "))
+print("\ncosts taxi to customers: ")
+
+cost = []
+
+for taxi in range(n):
+    row = list(map(int, input(f"Taxi {taxi+1}: ").split()))
+    cost.append(row)
+
+assignment, total = hungarian(cost)
+
+
+# output
+print("\ntaxi assignment:")
+for taxi in range(len(assignment)):
+    customer = assignment[taxi]
+    print(f"Taxi {taxi + 1} = Customer {customer + 1} (cost={cost[taxi][customer]})")
+
+print("\nsmallest cost:", total)
+
+```
+
+### 6. Result
+
+result of using this algorithm for this example:
+
+1. **Reduced Wait Times:** Optimized routing ensures that the waiting time for all customers is minimized.
+
+2. **Fuel & Cost Savings:** By minimizing total distance traveled, the fleet consumes less fuel used.
+
+3. **Operational Efficiency:** removes human error and bias from the taxi pickup process, allowing for instant decision-making even during peak hours.
+
+### 7. Conclusion
 
 This project demonstrates that efficient taxi dispatching is not a matter of intuition, but of mathematical optimization. By applying the Hungarian Algorithm to a weighted bipartite graph model, we can guarantee the most efficient one-to-one matching between drivers and customers, satisfying our goal of minimizing total travel cost.
