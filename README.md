@@ -195,6 +195,8 @@ other example
 13 16 9
 ```
 <img width="404" height="284" alt="image" src="https://github.com/user-attachments/assets/a1cb1a94-5412-4cf3-bd91-78a9d729e3fe" />
+
+
 ```
 4
 90 75 75 80
@@ -203,6 +205,8 @@ other example
 45 110 95 115
 ```
 <img width="382" height="388" alt="image" src="https://github.com/user-attachments/assets/858373a1-d6e5-41d6-94ee-19b399c0e449" />
+
+
 ```
 5
 10 12 19 11 20
