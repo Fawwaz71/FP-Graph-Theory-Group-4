@@ -180,8 +180,38 @@ print("\nsmallest cost:", total)
 
 ```
 
+
+
 ### 6. Result
 <img width="391" height="314" alt="image" src="https://github.com/user-attachments/assets/7724679f-1878-4f48-82c4-986acc365a87" />
+
+
+
+other example
+```
+3
+10 19 8
+10 18 7
+13 16 9
+```
+<img width="404" height="284" alt="image" src="https://github.com/user-attachments/assets/a1cb1a94-5412-4cf3-bd91-78a9d729e3fe" />
+```
+4
+90 75 75 80
+35 85 55 65
+125 95 90 105
+45 110 95 115
+```
+<img width="382" height="388" alt="image" src="https://github.com/user-attachments/assets/858373a1-d6e5-41d6-94ee-19b399c0e449" />
+```
+5
+10 12 19 11 20
+10 5 10 15 30
+15 16 12 8 15
+18 20 22 25 10
+14 12 18 16 20
+```
+<img width="390" height="444" alt="image" src="https://github.com/user-attachments/assets/4bdc16b9-e141-4926-b2e7-83d79ae12952" />
 
 
 it show the smallest cost and ensure fair assignment for all customer to get the fastest pickup
