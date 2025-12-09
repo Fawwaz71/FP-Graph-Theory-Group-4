@@ -182,6 +182,8 @@ print("\nsmallest cost:", total)
 
 ### 6. Result
 <img width="391" height="314" alt="image" src="https://github.com/user-attachments/assets/7724679f-1878-4f48-82c4-986acc365a87" />
+
+
 it show the smallest cost and ensure fair assignment for all customer to get the fastest pickup
 
 result of using this algorithm for this example:
