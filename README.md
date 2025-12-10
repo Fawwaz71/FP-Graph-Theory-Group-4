@@ -50,10 +50,9 @@ this is example for the hungarian algorithm test
 | **Taxi 2** | 6 | 5 | 8 | 
 | **Taxi 3** | 9 | 2 | 6 | 
 
-#### 4.1 The "Greedy" Pitfall vs. Global Optimization
+#### 4.1 The Greedy vs. optimize
 
-A simple "greedy" approach might immediately assign **Taxi 1 to Customer 3** because the cost (3) is the lowest in the first row. However, this might force Taxi 2 and Taxi 3 into highly inefficient routes (e.g., forcing Taxi 3 to take a route costing 9).
-
+A simple greedy approach might immediately assign Taxi 1 to Customer 3 because the cost (3) is the lowest in the first row. This might force Taxi 2 and Taxi 3 into highly inefficient routes.
 The Hungarian Algorithm evaluates the matrix holistically. By processing the reductions, it identifies assignments that might look sub-optimal individually but result in the lowest **total** system cost.
 
 ### 5. Code
