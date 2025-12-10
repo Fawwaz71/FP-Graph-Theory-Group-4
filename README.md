@@ -34,53 +34,11 @@ By making the problem this way, it transforms into a "Assignment Problem" findin
 
 ### 3. Solution
 
-To solve this, we use of the **Hungarian Algorithm**.
+To solve this, we use of the **Hungarian Algorithm**
+#### 3.1 Flowchart
+<img width="1662" height="941" alt="image" src="https://github.com/user-attachments/assets/a905b1a3-7f38-4372-8ce3-b1ab713d700e" />
 
-#### 3.1 Algorithm Process
 
-#### **1. Initialization**
-* **Input:** Determine the number of drivers/customers (n).
-* **Input Cost Matrix:** Create matrix C[i][j], where each element represents the travel cost or time from Driver i to Customer j.
-* **Backup:** Store a copy of this original matrix (to compute the final total cost later).
-
-#### **2. Row Reduction**
-* **For each row i:**
-    * Find the minimum value in that row.
-    * Subtract this minimum from every element in that row.
-
-#### **3. Column Reduction**
-* **For each column j:**
-    * Find the minimum value in that column.
-    * Subtract this minimum from every element in that column.
-
-#### **4. Cover Zeros**
-* **Action:** Cover all zeros in the matrix using the **minimum** number of horizontal and vertical lines.
-* **Count:** Let the number of lines = k.
-
-#### **5. Optimality Check (Is k == n? )**
-
-**(If k < n):**
-1.  **Find m:** Identify the smallest element that is *not* covered by any line.
-2.  **Adjust Matrix:**
-    * Subtract m from every uncovered element.
-    * Add m to every element located at the intersection of two lines.
-3.  **Loop:** Return to **Step 4 (Cover Zeros)**.
-
-**(If k == n):**
-* Proceed to next step.
-
-#### **6. Assignment**
-* **Selection:** From the final zero matrix, choose a set of zeros such that there is exactly **one** selected zero per row and per column.
-* **Record:** These positions represent the optimal Driver-to-Customer pairings (i, j).
-
-#### **7. Compute Total Cost**
-* **Summation:** For each assigned pair (i, j):
-    * Retrieve the cost from the *original* matrix (C_{original}[i][j]).
-    * Add this to the `TotalCost`.
-
-#### **8. Output**
-* **Optimal Assignment:** Display which driver is assigned to which customer.
-* **Minimum Total Cost:** Display the final calculated sum.
 
 ### 4. Case Study: 3x3 Matrix Scenario
 
@@ -179,15 +137,20 @@ for taxi in range(len(assignment)):
 print("\nsmallest cost:", total)
 
 ```
+#### 3.1 Code Explanation
 
 
 
 ### 6. Result
+```
+3
+4 7 3
+6 5 8
+9 2 6
+```
 <img width="391" height="314" alt="image" src="https://github.com/user-attachments/assets/7724679f-1878-4f48-82c4-986acc365a87" />
 
 
-
-other example
 ```
 3
 10 19 8
