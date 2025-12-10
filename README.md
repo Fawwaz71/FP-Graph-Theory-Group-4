@@ -13,6 +13,8 @@
 
 * Muhammad Umar Rusjanto (5025231176)
 
+**https://colab.research.google.com/drive/1SPulBlzAGD6ggW7R-_5z47iaxNc6UYEX?usp=sharing**
+
 ### 1. Introduction
 A taxi driver has several drivers in different locations. Each driver has different travel times or costs to reach each location point because of the distance from the starting location to the destination. Since taxi orders do not come after another order finishes, they need to utilize their driver to assign each of their driver to the closest customer at the same time.
 
