@@ -143,43 +143,9 @@ print("\nsmallest cost:", total)
 
 
 ### 6. Result
-```
-3
-4 7 3
-6 5 8
-9 2 6
-```
-<img width="391" height="314" alt="image" src="https://github.com/user-attachments/assets/7724679f-1878-4f48-82c4-986acc365a87" />
+<img width="326" height="1010" alt="image" src="https://github.com/user-attachments/assets/1150cdf2-82fa-4f7d-bbf2-ae233598ba17" />
 
-
-```
-3
-10 19 8
-10 18 7
-13 16 9
-```
-<img width="404" height="284" alt="image" src="https://github.com/user-attachments/assets/a1cb1a94-5412-4cf3-bd91-78a9d729e3fe" />
-
-
-```
-4
-90 75 75 80
-35 85 55 65
-125 95 90 105
-45 110 95 115
-```
-<img width="382" height="388" alt="image" src="https://github.com/user-attachments/assets/858373a1-d6e5-41d6-94ee-19b399c0e449" />
-
-
-```
-5
-10 12 19 11 20
-10 5 10 15 30
-15 16 12 8 15
-18 20 22 25 10
-14 12 18 16 20
-```
-<img width="390" height="444" alt="image" src="https://github.com/user-attachments/assets/4bdc16b9-e141-4926-b2e7-83d79ae12952" />
+<img width="364" height="1331" alt="image" src="https://github.com/user-attachments/assets/53397065-9238-4298-81f4-6d37786449d2" />
 
 
 it show the smallest cost and ensure fair assignment for all customer to get the fastest pickup
