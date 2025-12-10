@@ -168,9 +168,6 @@ print("\nsmallest cost:", total)
 <img width="361" height="346" alt="image" src="https://github.com/user-attachments/assets/7c0d0716-cd94-4045-b0c4-90f32027a3bc" />
 
 
-<img width="364" height="387" alt="image" src="https://github.com/user-attachments/assets/401efc39-0757-45c2-8650-0d71e0359ce1" />
-
-
 <img width="364" height="387" alt="image" src="https://github.com/user-attachments/assets/b65e92e9-4c48-4393-ab7a-c78fdb0bac88" />
 
 
