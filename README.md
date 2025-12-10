@@ -62,34 +62,52 @@ The Hungarian Algorithm evaluates the matrix holistically. By processing the red
 from math import inf
 
 def hungarian(cost):
+    # n = The size of the matrix
     n = len(cost)
+
+    # u, v: used to modify costs
+    # p:    The matchin array. p[j] stores which Row is matched to Column j.
+    # way:  Stores the path so we can backtrack.
     u = [0] * (n + 1)
     v = [0] * (n + 1)
     p = [0] * (n + 1)
     way = [0] * (n + 1)
 
     for i in range(1, n + 1):
-        p[0] = i
-        j0 = 0
+        p[0] = i       # Place the current row 'i' into a temp variable
+        j0 = 0         # Start searching from the temp column 0
+        
+        # minv: Stores the smallest cost found so far for the current path scan
+        # used: Keeps track of which columns we have looked at in this step
         minv = [inf] * (n + 1)
         used = [False] * (n + 1)
 
+        # --- 3. FIND AUGMENTING PATH (While loop) ---
+        # This part searches for the best available column to assign.
         while True:
-            used[j0] = True
-            i0 = p[j0]
-            delta = inf
-            j1 = 0
+            used[j0] = True     # Mark current column as visited
+            i0 = p[j0]          # Get the row currently assigned to this column
+            delta = inf         # delta tracks how much we need
+            j1 = 0              # j1 will store the next column to move
 
+            # Check every column j to see if it's a good match
             for j in range(1, n + 1):
                 if not used[j]:
+                    # Calculate Cost = original - potential
                     cur = cost[i0 - 1][j - 1] - u[i0] - v[j]
+                    
+                    # Update the minimum cost found in this column
                     if cur < minv[j]:
                         minv[j] = cur
-                        way[j] = j0
+                        way[j] = j0  # Remember we came from j0 (for backtracking)
+                    
+                    # Find the smallest difference to the next step
                     if minv[j] < delta:
                         delta = minv[j]
                         j1 = j
 
+            # If we are stuck, we change the u and v potentials using 'delta'.
+            # This find new edgess that were previously too high.
             for j in range(n + 1):
                 if used[j]:
                     u[p[j]] += delta
@@ -97,10 +115,15 @@ def hungarian(cost):
                 else:
                     minv[j] -= delta
 
+            # Move to the next column
             j0 = j1
+            
+            # If p[j0] is 0, it means we found a free column! We are done searching.
             if p[j0] == 0:
                 break
 
+        # bactrack
+        # path found, now we follow the way array backwards to assign the rows to the columns.
         while True:
             j1 = way[j0]
             p[j0] = p[j1]
@@ -108,26 +131,27 @@ def hungarian(cost):
             if j0 == 0:
                 break
 
+    # Convert the array into a Python list
     assignment = [-1] * n
     for j in range(1, n + 1):
         assignment[p[j] - 1] = j - 1
 
+    # Sum up the actual costs from the original matrix based on assignment
     total_cost = sum(cost[i][assignment[i]] for i in range(n))
     return assignment, total_cost
 
 
-# input
+# input the number of cost per driver customer
 n = int(input("number of taxi and customers: "))
 print("\ncosts taxi to customers: ")
 
 cost = []
-
 for taxi in range(n):
     row = list(map(int, input(f"Taxi {taxi+1}: ").split()))
     cost.append(row)
 
+# run the funciton
 assignment, total = hungarian(cost)
-
 
 # output
 print("\ntaxi assignment:")
@@ -138,14 +162,9 @@ for taxi in range(len(assignment)):
 print("\nsmallest cost:", total)
 
 ```
-#### 3.1 Code Explanation
-
-
 
 ### 6. Result
-<img width="326" height="1010" alt="image" src="https://github.com/user-attachments/assets/1150cdf2-82fa-4f7d-bbf2-ae233598ba17" />
 
-<img width="364" height="1331" alt="image" src="https://github.com/user-attachments/assets/53397065-9238-4298-81f4-6d37786449d2" />
 
 
 it show the smallest cost and ensure fair assignment for all customer to get the fastest pickup
