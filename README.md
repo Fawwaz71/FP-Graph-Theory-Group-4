@@ -162,6 +162,12 @@ for taxi in range(len(assignment)):
 print("\nsmallest cost:", total)
 
 ```
+### 5.1 How to use
+
+put the number of matrix wanted example: 3
+then put the data set per collum example: 9 4 6
+do this for the amount of matrix
+
 
 ### 6. Result
 
