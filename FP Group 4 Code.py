@@ -54,24 +54,53 @@ def hungarian(cost):
     total_cost = sum(cost[i][assignment[i]] for i in range(n))
     return assignment, total_cost
 
+cost1 = [
+    [10, 19, 8], 
+    [10, 18, 7], 
+    [13, 16, 9]
+]
+cost2 = [
+    [90, 75, 75, 80], 
+    [35, 85, 55, 65], 
+    [125, 95, 90, 105], 
+    [45, 110, 95, 115]
+]
 
-# input
-n = int(input("number of taxi and customers: "))
-print("\ncosts taxi to customers: ")
+cost3 = [
+    [10, 0, 20, 15], 
+    [15, 25, 0, 10], 
+    [0, 15, 30, 20], 
+    [20, 10, 15, 0]
+]
 
-cost = []
+cost4 = [
+    [10, 12, 18, 25, 20], 
+    [15, 22, 14, 28, 18], 
+    [20, 18, 16, 24, 22], 
+    [25, 28, 24, 12, 10], 
+    [18, 20, 22, 15, 16]
+]
 
-for taxi in range(n):
-    row = list(map(int, input(f"Taxi {taxi+1}: ").split()))
-    cost.append(row)
+cost5 = [
+    [5, 8, 7, 6, 9, 4], 
+    [8, 6, 9, 7, 5, 8], 
+    [7, 9, 6, 8, 4, 7], 
+    [6, 7, 8, 5, 9, 6], 
+    [9, 5, 4, 9, 6, 5], 
+    [4, 8, 7, 6, 5, 9]
+]
 
-assignment, total = hungarian(cost)
+all_datasets = [cost1, cost2, cost3, cost4, cost5]
 
+# Loop through and print results for each
+for i, cost in enumerate(all_datasets):
+    assignment, total = hungarian(cost)
 
-# output
-print("\ntaxi assignment:")
-for taxi in range(len(assignment)):
-    customer = assignment[taxi]
-    print(f"Taxi {taxi + 1} = Customer {customer + 1} (cost={cost[taxi][customer]})")
+    print(f"\n test {i + 1}")
 
-print("\nsmallest cost:", total)
+    print("\ntaxi assignment:")
+    for taxi in range(len(assignment)):
+        customer = assignment[taxi]
+        print(f"Taxi {taxi + 1} = Customer {customer + 1} (cost={cost[taxi][customer]})")
+
+    print("\nsmallest cost:", total)
