@@ -189,4 +189,5 @@ result of using this algorithm for this example:
 
 ### 7. Conclusion
 
-This project demonstrates that efficient taxi dispatching is not a matter of intuition, but of mathematical optimization. By applying the Hungarian Algorithm to a weighted bipartite graph model, we can guarantee the most efficient one-to-one matching between drivers and customers, satisfying our goal of minimizing total travel cost.
+This project shows that the algorithm works when we test it with small and simple. This proves the main idea is correct. However, to use this algorithm in the real world, it needs a lot of work. The next step is to make it faster so it can handle huge amounts of data, and stronger so it doesn't break when it finds unfinish data. it need a lot of improvement if want to be use in real world
+
