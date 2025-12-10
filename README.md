@@ -165,6 +165,19 @@ print("\nsmallest cost:", total)
 
 ### 6. Result
 
+<img width="361" height="346" alt="image" src="https://github.com/user-attachments/assets/7c0d0716-cd94-4045-b0c4-90f32027a3bc" />
+
+
+<img width="364" height="387" alt="image" src="https://github.com/user-attachments/assets/401efc39-0757-45c2-8650-0d71e0359ce1" />
+
+
+<img width="364" height="387" alt="image" src="https://github.com/user-attachments/assets/b65e92e9-4c48-4393-ab7a-c78fdb0bac88" />
+
+
+<img width="371" height="444" alt="image" src="https://github.com/user-attachments/assets/98c8159a-40e2-4df9-b7cb-5407321135b0" />
+
+
+<img width="361" height="441" alt="image" src="https://github.com/user-attachments/assets/c11e7688-7eb1-4cd0-a438-e00faa0b36cb" />
 
 
 it show the smallest cost and ensure fair assignment for all customer to get the fastest pickup
