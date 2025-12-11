@@ -36,29 +36,47 @@ By making the problem this way, it transforms into a "Assignment Problem" findin
 
 ### 3. Solution
 
-To solve this, we use of the **Hungarian Algorithm**
+We compare two approaches:
+
+**Hungarian Algorithm** - finds the global minimum-cost perfect matching (optimal).
+
+**Greedy Matching** - a simple greedy heuristic that repeatedly selects the locally cheapest available pair (fast but not guaranteed optimal).
+
+Both algorithms accept the same input format (an n × n cost matrix entered row-by-row).
 #### 3.1 Flowchart
 <img width="1662" height="941" alt="image" src="https://github.com/user-attachments/assets/a905b1a3-7f38-4372-8ce3-b1ab713d700e" />
+<img width="1442" height="810" alt="image" src="https://github.com/user-attachments/assets/935d586f-aebe-49ef-a3a8-7ff9dd1a1f1a" />
 
 
 
-### 4. Case Study: 3x3 Matrix Scenario
 
-this is example for the hungarian algorithm test
+### 4. Case Study
 
-| Source \\ Dest | Customer 1 | Customer 2 | Customer 3 | 
+#### 4.1 Small Example (3×3)
+
+| Taxi \\ Customer | Customer 1 | Customer 2 | Customer 3 | 
  | ----- | ----- | ----- | ----- | 
 | **Taxi 1** | 4 | 7 | 3 | 
 | **Taxi 2** | 6 | 5 | 8 | 
 | **Taxi 3** | 9 | 2 | 6 | 
 
-#### 4.1 The Greedy vs. optimize
+For the 3×3 matrix, the Greedy Matching approach selects the lowest available cost at each step, such as assigning Taxi 1 to Customer 3 (cost 3), but this forces later taxis into more expensive matches and results in a total cost of 17. In contrast, the Hungarian Algorithm considers the entire cost structure and rearranges the assignments—placing Taxi 3 with Customer 2 (cost 2) and Taxi 2 with Customer 1 (cost 6)—leading to a significantly lower total cost of 11. This example shows that even in small cases, Greedy’s local decisions can create suboptimal overall outcomes, while Hungarian consistently finds the global minimum.
 
-A simple greedy approach might immediately assign Taxi 1 to Customer 3 because the cost (3) is the lowest in the first row. This might force Taxi 2 and Taxi 3 into highly inefficient routes.
-The Hungarian Algorithm evaluates the matrix holistically. By processing the reductions, it identifies assignments that might look sub-optimal individually but result in the lowest **total** system cost.
+#### 4.2 Larger Example (5×5)
+
+| Taxi \\ Customer | Customer 1 | Customer 2 | Customer 3 | Customer 4 |  Customer 5 | 
+ | ----- | ----- | ----- | ----- | ----- | ----- | 
+| **Taxi 1** | 4 | 1 | 9 | 8 | 8 | 
+| **Taxi 2** | 5 | 4 | 18 | 3 | 19 | 
+| **Taxi 3** | 14 | 2 | 1 | 3 | 7 | 
+| **Taxi 3** | 8 | 17 | 20 | 1 | 18 | 
+| **Taxi 3** | 7 | 18 | 14 | 8 | 15 | 
+
+In the 5×5 matrix, Greedy again takes the cheapest immediate options, including assigning Taxi 1 to Customer 2 (cost 1), but this early decision blocks Taxi 2 from its more efficient match and eventually forces Taxi 5 into a high-cost assignment, producing a total cost of 23. Meanwhile, the Hungarian Algorithm evaluates all rows and columns together and avoids prematurely using key low-cost customers, resulting in a more balanced solution: Taxi 2 is matched to Customer 2 (cost 4), Taxi 5 to Customer 1 (cost 7), and Taxi 1 is shifted to Customer 5 (cost 8), achieving a lower total of 21. This larger example highlights the increasing performance gap as the assignment size grows, reinforcing Hungarian’s advantage in global optimization over Greedy’s short-sighted strategy.
 
 ### 5. Code
-```
+#### Hungarian Algortihm
+```c
 from math import inf
 
 def hungarian(cost):
@@ -162,6 +180,78 @@ for taxi in range(len(assignment)):
 print("\nsmallest cost:", total)
 
 ```
+
+#### Greedy Matching Algorithm
+```c
+from math import inf
+
+def greedy_matching(cost):
+    # n = size of the (square) cost matrix
+    n = len(cost)
+
+    # Basic validation: ensure square matrix
+    for i, row in enumerate(cost):
+        if len(row) != n:
+            raise ValueError(f"Row {i} length {len(row)} does not match n={n}.")
+
+    # Track sets of unassigned drivers/customers
+    unassigned_drivers = set(range(n))     # driver indices 0..n-1
+    unassigned_customers = set(range(n))   # customer indices 0..n-1
+
+    # assignment[i] = j means driver i -> customer j
+    assignment = [-1] * n
+    total_cost = 0
+
+    # Repeat until every driver is assigned
+    while unassigned_drivers:
+        # --- Find candidate pairs ---
+        # For each unassigned driver, find its minimum-cost available customer
+        candidates = []  # list of tuples (cost, driver_i, customer_j)
+        for i in sorted(unassigned_drivers):
+            best_j = None
+            best_cost = inf
+            for j in unassigned_customers:
+                if cost[i][j] < best_cost:
+                    best_cost = cost[i][j]
+                    best_j = j
+            # store candidate (use driver index order as tie-breaker implicitly)
+            if best_j is not None:
+                candidates.append((best_cost, i, best_j))
+
+        # Defensive check (shouldn't happen for square complete bipartite)
+        if not candidates:
+            raise RuntimeError("No candidate pairs found — check input and unassigned sets.")
+
+        # --- Select global minimum-cost candidate pair ---
+        # tie-breaking: min by cost, then smallest driver index, then smallest customer index
+        candidates.sort(key=lambda x: (x[0], x[1], x[2]))
+        chosen_cost, chosen_i, chosen_j = candidates[0]
+
+        # --- Assign the chosen pair ---
+        assignment[chosen_i] = chosen_j
+        total_cost += cost[chosen_i][chosen_j]
+        unassigned_drivers.remove(chosen_i)
+        unassigned_customers.remove(chosen_j)
+
+    return assignment, total_cost
+
+n = int(input("number of taxi and customers: "))
+print("\ncosts taxi to customers: ")
+
+cost = []
+for taxi in range(n):
+    row = list(map(int, input(f"Taxi {taxi+1}: ").split()))
+    cost.append(row)
+
+assignment, total = greedy_matching(cost)
+
+print("\ntaxi assignment:")
+for taxi in range(len(assignment)):
+    customer = assignment[taxi]
+    print(f"Taxi {taxi + 1} = Customer {customer + 1} (cost={cost[taxi][customer]})")
+
+print("\ntotal cost:", total)
+```
 ### 5.1 How to use
 
 put the number of matrix wanted example: 3
@@ -195,5 +285,5 @@ result of using this algorithm for this example:
 
 ### 7. Conclusion
 
-This project shows that the algorithm works when we test it with small and simple. This proves the main idea is correct. However, to use this algorithm in the real world, it needs a lot of work. The next step is to make it faster so it can handle huge amounts of data, and stronger so it doesn't break when it finds unfinish data. it need a lot of improvement if want to be use in real world
+This project confirms that modeling taxi dispatch as an assignment problem is effective and that both algorithms function correctly on small test cases. However, the comparison shows that while Greedy Matching offers fast, simple decisions, it often leads to higher overall costs especially as the problem size increases. The Hungarian Algorithm consistently delivers the optimal solution and is therefore more suitable for real-world dispatching. To make this approach practical at scale, future work should focus on improving performance, handling large and dynamic datasets, and integrating real-world factors such as traffic and driver availability.
 
