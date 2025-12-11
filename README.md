@@ -186,48 +186,42 @@ print("\nsmallest cost:", total)
 from math import inf
 
 def greedy_matching(cost):
-    # n = size of the (square) cost matrix
+
     n = len(cost)
 
-    # Basic validation: ensure square matrix
     for i, row in enumerate(cost):
         if len(row) != n:
             raise ValueError(f"Row {i} length {len(row)} does not match n={n}.")
 
-    # Track sets of unassigned drivers/customers
-    unassigned_drivers = set(range(n))     # driver indices 0..n-1
-    unassigned_customers = set(range(n))   # customer indices 0..n-1
 
-    # assignment[i] = j means driver i -> customer j
+    unassigned_drivers = set(range(n))     
+    unassigned_customers = set(range(n))   
+
+
     assignment = [-1] * n
     total_cost = 0
 
-    # Repeat until every driver is assigned
+
     while unassigned_drivers:
-        # --- Find candidate pairs ---
-        # For each unassigned driver, find its minimum-cost available customer
-        candidates = []  # list of tuples (cost, driver_i, customer_j)
+
+        candidates = []  
         for i in sorted(unassigned_drivers):
             best_j = None
             best_cost = inf
             for j in unassigned_customers:
                 if cost[i][j] < best_cost:
                     best_cost = cost[i][j]
-                    best_j = j
-            # store candidate (use driver index order as tie-breaker implicitly)
+
             if best_j is not None:
                 candidates.append((best_cost, i, best_j))
 
-        # Defensive check (shouldn't happen for square complete bipartite)
+
         if not candidates:
             raise RuntimeError("No candidate pairs found — check input and unassigned sets.")
 
-        # --- Select global minimum-cost candidate pair ---
-        # tie-breaking: min by cost, then smallest driver index, then smallest customer index
         candidates.sort(key=lambda x: (x[0], x[1], x[2]))
         chosen_cost, chosen_i, chosen_j = candidates[0]
 
-        # --- Assign the chosen pair ---
         assignment[chosen_i] = chosen_j
         total_cost += cost[chosen_i][chosen_j]
         unassigned_drivers.remove(chosen_i)
@@ -250,7 +244,7 @@ for taxi in range(len(assignment)):
     customer = assignment[taxi]
     print(f"Taxi {taxi + 1} = Customer {customer + 1} (cost={cost[taxi][customer]})")
 
-print("\ntotal cost:", total)
+print("\ntotal cost:", total)
 ```
 ### 5.1 How to use
 
